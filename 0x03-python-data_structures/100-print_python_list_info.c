@@ -1,23 +1,21 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <Python.h>
+#include <object.h>
+#include <listobject.h>
 
-void print_python_list_info(PyObject *p) {
-    // Verify that the object is a list
-    if (!PyList_Check(p)) {
-        printf("ERROR: Object is not a list\n");
-        return;
-    }
+/**
+* print_python_list_info - prints some basic info about pytohn list
+* @p: python object
+**/
 
-    // Print the length of the list
-    printf("Length of list: %ld\n", PyList_Size(p));
+void print_python_list_info(PyObject *p)
+{
+	long int size = PyList_Size(p);
+	int i;
+	PyListObject *obj = (PyListObject *)p;
 
-    // Print the items in the list
-    printf("Items in list:\n");
-    for (int i = 0; i < PyList_Size(p); i++) {
-        PyObject *item = PyList_GetItem(p, i);
-        printf("%d: ", i);
-        PyObject_Print(item, stdout, 0);
-        printf("\n");
-    }
+	printf("[*] Size of the Python List = %li\n", size);
+	printf("[*] Allocated = %li\n", obj->allocated);
+	for (i = 0; i < size; i++)
+		printf("Element %i: %s\n", i, Py_TYPE(obj->ob_item[i])->tp_name);
+
 }
